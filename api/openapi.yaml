@@ -1,0 +1,552 @@
+openapi: 3.0.0
+info:
+  title: EduDocsHub API
+  version: 1.0.0
+servers:
+- url: https://EdudocsHub.com/api
+tags:
+- name: admin
+  description: Admin oparations
+- name: user
+  description: Operations for users.
+paths:
+  /course/search:
+    get:
+      tags:
+      - user
+      summary: searches Courses DB
+      description: Returns arrays of Course objects
+      operationId: searchCourseDB
+      parameters:
+      - name: keyword
+        in: query
+        description: Keyword to search for in courseDB.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Successfully retrieved course search results.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseArray'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-swagger-router-controller: User
+  /users/{userid}/Favourites/Files:
+    get:
+      tags:
+      - user
+      summary: User Favourites Files
+      description: |
+        Getting the Users Favourites Files
+      operationId: UserFavouritesFiles
+      parameters:
+      - name: userid
+        in: path
+        description: |
+          The user ID for whom to laod the favourites files.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: View the favourite files.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FilesArray'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-swagger-router-controller: User
+  /users/{userid}/Favourites/Files/{fileid}:
+    post:
+      tags:
+      - user
+      summary: Add file to favourites
+      description: |
+        The user add file to favourite folder
+      operationId: addFavouriteFile
+      parameters:
+      - name: userid
+        in: path
+        description: |
+          The user ID for whom to add file to the favourites folder
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      - name: fileid
+        in: path
+        description: |
+          The file ID to perform the post oparation.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Successfully add file to favourites Message.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-swagger-router-controller: User
+    delete:
+      tags:
+      - user
+      summary: Favourites File Remove
+      description: |
+        The user remove from favourite folder a file
+      operationId: RemoveFavouriteFile
+      parameters:
+      - name: userid
+        in: path
+        description: |
+          The user ID for whom to laod the favourites files.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      - name: fileid
+        in: path
+        description: |
+          The file ID to perform the delete oparation.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Successfully remove file from favourites Message.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-swagger-router-controller: User
+  /users/{userid}/UserFiles/Files:
+    post:
+      tags:
+      - user
+      summary: file upload
+      description: we send a file object and we get a confirmation message as a response
+      operationId: uploadNewFile
+      parameters:
+      - name: userid
+        in: path
+        description: The user ID in order to perform the course search.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/File'
+      responses:
+        "200":
+          description: Successfully uploaded file.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-swagger-router-controller: User
+  /users/{userid}/UserFiles/Files/{fileid}:
+    put:
+      tags:
+      - user
+      summary: user file editing
+      description: we send the new charachteristics of the file and we get a comfirmation
+        message as a response
+      operationId: userFileEditing
+      parameters:
+      - name: userid
+        in: path
+        description: The user ID for whom to perform the course search.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      - name: fileid
+        in: path
+        description: The file ID for the file will perform the update
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/File'
+      responses:
+        "200":
+          description: Successfully uploaded file.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-swagger-router-controller: User
+    delete:
+      tags:
+      - user
+      summary: File Deletion
+      description: |
+        The user remove from favourite folder a file
+      operationId: RemoveUserFile
+      parameters:
+      - name: userid
+        in: path
+        description: |
+          The user ID in order to remove the favourite files.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      - name: fileid
+        in: path
+        description: |
+          The File ID in order to remove the file.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Successfully remove file from my files.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-swagger-router-controller: User
+  /course/{courseid}/reviews:
+    get:
+      tags:
+      - user
+      summary: view Review
+      description: Submit new review for the file
+      operationId: viewReview
+      parameters:
+      - name: courseid
+        in: path
+        description: The courseid.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Successfully retrieved course search results.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RatingArray'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-swagger-router-controller: User
+    post:
+      tags:
+      - user
+      summary: write review
+      description: We send the fileid of a file and we get a file object as a response
+      operationId: writeReview
+      parameters:
+      - name: courseid
+        in: path
+        description: The courseid.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Rating'
+      responses:
+        "200":
+          description: Successfully downloaded file.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-swagger-router-controller: User
+  /course/{courseid}/Files:
+    get:
+      tags:
+      - user
+      summary: Get Course files
+      description: Get course files
+      operationId: GetFiles
+      parameters:
+      - name: courseid
+        in: path
+        description: The courseid in order to get the course object.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Successfully get the files of course.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FilesArray'
+        default:
+          description: Error massage
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-swagger-router-controller: User
+  /course/{courseid}/Files/{fileid}:
+    get:
+      tags:
+      - user
+      summary: download file
+      description: User download a file
+      operationId: downloadFile
+      parameters:
+      - name: courseid
+        in: path
+        description: The courseid in order to get the course object.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      - name: fileid
+        in: path
+        description: The fileid of the file
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Successfully download file.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        default:
+          description: Error massage
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-swagger-router-controller: User
+  /admin/courses/{courseid}:
+    put:
+      tags:
+      - admin
+      summary: Admin Course Editing
+      description: "We send the new characteristics of the course and receive a \n\
+        confirmation message as a response.\n"
+      operationId: AdminCourseEditing
+      parameters:
+      - name: courseid
+        in: path
+        description: |
+          The ID of the course that the admin is going to edit.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Course'
+      responses:
+        "200":
+          description: Successfully changed the course attributes message.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-swagger-router-controller: Admin
+    delete:
+      tags:
+      - admin
+      summary: Admin file Deletion
+      description: Admin removes a file
+      operationId: AdminRemoveCourse
+      parameters:
+      - name: courseid
+        in: path
+        description: The courseid in order to get the course object.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Successfully deleted course.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-swagger-router-controller: Admin
+components:
+  schemas:
+    Message:
+      type: object
+      properties:
+        text:
+          type: string
+      example:
+        text: text
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+    CourseArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/Course'
+    FilesArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/File'
+    RatingArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/Rating'
+    Course:
+      type: object
+      properties:
+        semester:
+          type: string
+        school:
+          type: string
+        university:
+          type: string
+        title:
+          type: string
+        courseid:
+          type: integer
+      example:
+        school: school
+        university: university
+        semester: semester
+        title: title
+        courseid: 0
+    Rating:
+      type: object
+      properties:
+        starnumber:
+          type: integer
+        author:
+          type: string
+        review:
+          type: string
+        reviewid:
+          type: integer
+      example:
+        author: author
+        review: review
+        starnumber: 0
+        reviewid: 6
+    File:
+      type: object
+      properties:
+        title:
+          type: integer
+        school:
+          type: integer
+        fileType:
+          type: string
+        accessStatus:
+          type: integer
+      example:
+        school: 6
+        accessStatus: 1
+        title: 0
+        fileType: fileType
