@@ -4,9 +4,7 @@ var path = require('path');
 var http = require('http');
 
 var oas3Tools = require('oas3-tools');
-//var serverPort = 8080;
-var serverPort = process.env.PORT || 8080; // Χρησιμοποίησε τη μεταβλητή περιβάλλοντος
-
+var serverPort = process.env.PORT || 8080; // Χρήση μεταβλητής περιβάλλοντος
 
 // swaggerRouter configuration
 var options = {
@@ -17,6 +15,11 @@ var options = {
 
 var expressAppConfig = oas3Tools.expressAppConfig(path.join(__dirname, 'api/openapi.yaml'), options);
 var app = expressAppConfig.getApp();
+
+// Route για τη ρίζα του API
+app.get('/', (req, res) => {
+    res.send('Welcome to EduDocsHub API');
+});
 
 // Initialize the Swagger middleware
 http.createServer(app).listen(serverPort, function () {
