@@ -4,7 +4,9 @@ var path = require('path');
 var http = require('http');
 
 var oas3Tools = require('oas3-tools');
-var serverPort = 8080;
+//var serverPort = 8080;
+var serverPort = process.env.PORT || 8080; // Χρησιμοποίησε τη μεταβλητή περιβάλλοντος
+
 
 // swaggerRouter configuration
 var options = {
