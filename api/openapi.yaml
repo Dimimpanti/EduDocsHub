@@ -3,8 +3,8 @@ info:
   title: EduDocsHub API
   version: 1.0.0
 
-  //servers:
-//- url: https://EdudocsHub.com/api
+#servers:
+#- url: https://EdudocsHub.com/api
 tags:
 - name: admin
   description: Admin oparations
