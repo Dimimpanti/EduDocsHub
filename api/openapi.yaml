@@ -2,9 +2,9 @@ openapi: 3.0.0
 info:
   title: EduDocsHub API
   version: 1.0.0
-servers:
-- url: https://EdudocsHub.com/api
-- url: http://localhost:8080/api
+##servers:
+##- url: https://EdudocsHub.com/api
+##- url: http://localhost:8080/api
 
 tags:
 - name: admin
