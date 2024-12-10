@@ -5,10 +5,7 @@
   "main": "index.js",
   "scripts": {
     "prestart": "npm install",
-    "start": "node index.js",
-    "test": "c8 ava",
-    "cypress:open": "cypress open",
-    "cypress:run": "cypress run"
+    "start": "node index.js"
   },
 
   "keywords": [
