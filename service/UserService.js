@@ -266,7 +266,7 @@ exports.uploadNewFile = function (body, userid) {
  * userid Integer The user ID for whom to laod the favourites files. 
  * returns FilesArray
  **/
-exports.UserFavouritesFiles = function(userid) {
+exports.userFavouritesFiles = function(userid) {
   return new Promise(function(resolve, reject) {
     if (isNaN(userid)) {
       reject({
