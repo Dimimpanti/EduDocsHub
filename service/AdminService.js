@@ -9,19 +9,32 @@
  * courseid Integer The ID of the course that the admin is going to edit. 
  * returns Message
  **/
-exports.adminCourseEditing = function(body,courseid) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "text" : "text"
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
+exports.adminCourseEditing = function (body, courseid) {
+  return new Promise(function (resolve, reject) {
+    if (isNaN(courseid) || !body || !body.title || body.title.trim() === '') {
+      reject({
+        code: 400,
+        message: 'Invalid course ID or request body',
+      });
+      return;
     }
+
+    const existingCourses = [101, 102, 103]; // Παράδειγμα υπαρχόντων μαθημάτων
+    if (!existingCourses.includes(courseid)) {
+      reject({
+        code: 404,
+        message: 'Course not found',
+      });
+      return;
+    }
+
+    // Επιτυχής επεξεργασία
+    resolve({
+      text: 'Course successfully updated',
+    });
   });
-}
+};
+
 
 
 /**
@@ -31,17 +44,28 @@ exports.adminCourseEditing = function(body,courseid) {
  * courseid Integer The courseid in order to get the course object.
  * returns Message
  **/
-exports.adminRemoveCourse = function(courseid) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "text" : "text"
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
+exports.adminRemoveCourse = function (courseid) {
+  return new Promise(function (resolve, reject) {
+    if (isNaN(courseid)) {
+      reject({
+        code: 400,
+        message: 'Invalid course ID',
+      });
+      return;
     }
-  });
-}
 
+    const existingCourses = [101, 102, 103]; // Παράδειγμα υπαρχόντων μαθημάτων
+    if (!existingCourses.includes(courseid)) {
+      reject({
+        code: 404,
+        message: 'Course not found',
+      });
+      return;
+    }
+
+    // Επιτυχής διαγραφή
+    resolve({
+      text: 'Course successfully deleted',
+    });
+  });
+};
