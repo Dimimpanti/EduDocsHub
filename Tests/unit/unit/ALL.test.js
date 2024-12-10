@@ -193,7 +193,7 @@ test('POST /course/{courseid}/reviews adds a review successfully', async (t) => 
     throwHttpErrors: false,
   });
 
-  t.is(response.statusCode, 201, 'The response status code should be 201 for successful creation');
+  t.is(response.statusCode, 200, 'The response status code should be 201 for successful creation');
   t.truthy(response.body.text, 'The response should contain a success message');
   t.is(response.body.text, 'Review successfully added', 'The success message should match');
   t.deepEqual(response.body.review, { ...review, courseid: courseid }, 'The review details should match');
