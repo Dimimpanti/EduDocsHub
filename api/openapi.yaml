@@ -48,7 +48,7 @@ paths:
       summary: User Favourites Files
       description: |
         Getting the Users Favourites Files
-      operationId: UserFavouritesFiles
+      operationId: userFavouritesFiles
       parameters:
       - name: userid
         in: path
@@ -120,7 +120,7 @@ paths:
       summary: Favourites File Remove
       description: |
         The user remove from favourite folder a file
-      operationId: RemoveFavouriteFile
+      operationId: removeFavouriteFile
       parameters:
       - name: userid
         in: path
@@ -239,7 +239,7 @@ paths:
       summary: File Deletion
       description: |
         The user remove from favourite folder a file
-      operationId: RemoveUserFile
+      operationId: removeUserFile
       parameters:
       - name: userid
         in: path
@@ -343,7 +343,7 @@ paths:
       - user
       summary: Get Course files
       description: Get course files
-      operationId: GetFiles
+      operationId: getFiles
       parameters:
       - name: courseid
         in: path
@@ -412,7 +412,7 @@ paths:
       summary: Admin Course Editing
       description: "We send the new characteristics of the course and receive a \n\
         confirmation message as a response.\n"
-      operationId: AdminCourseEditing
+      operationId: adminCourseEditing
       parameters:
       - name: courseid
         in: path
@@ -447,7 +447,7 @@ paths:
       - admin
       summary: Admin file Deletion
       description: Admin removes a file
-      operationId: AdminRemoveCourse
+      operationId: adminRemoveCourse
       parameters:
       - name: courseid
         in: path
