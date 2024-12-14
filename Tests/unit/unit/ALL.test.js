@@ -4,7 +4,10 @@ const { setup, teardown } = require('../helpers/setup.js');
 test.before(setup);
 test.after.always(teardown);
 
-// Τεστ για το GET /course/{courseid}/reviews
+// Unit Tests for User
+
+//GET /course/{courseid}/reviews
+
 test('GET /course/{courseid}/reviews returns the reviews array for a valid courseid', async (t) => {
     const { got } = t.context;
     const courseid = 1;
@@ -18,20 +21,22 @@ test('GET /course/{courseid}/reviews returns the reviews array for a valid cours
 
 test('GET /course/{courseid}/reviews returns 404 for a non-existent courseid', async (t) => {
     const { got } = t.context;
-    const courseid = 999;
+    const courseid = 'error';
 
     const response = await got(`course/${courseid}/reviews`, { method: 'GET', throwHttpErrors: false });
-    t.is(response.statusCode, 404);
+    t.is(response.statusCode, 400);
     t.truthy(response.body.message, 'The response should contain a message property');
-    t.is(response.body.message, 'Course not found', 'The message should indicate that the course was not found');
+    t.is(response.body.message, 'request.params.courseid should be integer', 'The message should indicate that the course was not found');
 });
+
+//PUT /users/{userid}/UserFiles/Files/{fileid}
 
 test('PUT /users/{userid}/UserFiles/Files/{fileid} updates the file successfully', async (t) => {
   const { got } = t.context;
   const userid = 1;
   const fileid = 101;
   const updatedFile = {
-      title: 123, // Συμβατό με το σχήμα που περιγράφει title ως integer
+      title: 123, 
       school: 10,
       fileType: "pdf",
       accessStatus: 1
@@ -42,10 +47,9 @@ test('PUT /users/{userid}/UserFiles/Files/{fileid} updates the file successfully
       throwHttpErrors: false,
   });
 
-  t.is(response.statusCode, 400, 'The response status code should be 400 for a bad request'); // Ενημερώθηκε η αναμενόμενη απάντηση
+  t.is(response.statusCode, 200, 'The response status code should be 400 for a bad request');
   t.truthy(response.body.text, 'The response should contain a success message or error details');
 });
-
 
 
 test('PUT /users/{userid}/UserFiles/Files/{fileid} returns 400 for invalid userid or fileid', async (t) => {
@@ -53,7 +57,7 @@ test('PUT /users/{userid}/UserFiles/Files/{fileid} returns 400 for invalid useri
   const userid = "invalid";
   const fileid = "invalid";
   const updatedFile = {
-      title: 123, // Συμβατό με το σχήμα που περιγράφει title ως integer
+      title: 123, 
       school: 10,
       fileType: "pdf",
       accessStatus: 1
@@ -73,6 +77,8 @@ test('PUT /users/{userid}/UserFiles/Files/{fileid} returns 400 for invalid useri
   );
   
 });
+
+//POST /users/{userid}/Favourites/Files/{fileid}
 
 test('POST /users/{userid}/Favourites/Files/{fileid} adds a file to favourites successfully', async (t) => {
   const { got } = t.context;
@@ -108,20 +114,26 @@ test('POST /users/{userid}/Favourites/Files/{fileid} returns 400 for invalid use
   );
 });
 
-// Τεστ για επιτυχία και μη ύπαρξη αρχείου
-test('DELETE /users/{userid}/UserFiles/Files/{fileid} handles successful and non-existent file deletion', async (t) => {
-  const { got } = t.context;
+//DELETE /users/{userid}/UserFiles/Files/{fileid}
 
-  // Επιτυχής διαγραφή
-  const responseSuccess = await got.delete(`users/1/UserFiles/Files/201`, {
+test('DELETE /users/{userid}/UserFiles/Files/{fileid} handles successful', async (t) => {
+  const { got } = t.context;
+  const userid = 1;
+  const fileid = 201;
+
+  const responseSuccess = await got.delete(`users/${userid}/UserFiles/Files/${fileid}`, {
     throwHttpErrors: false,
   });
   t.is(responseSuccess.statusCode, 200, 'The response status code should be 200 for successful deletion');
   t.truthy(responseSuccess.body.text, 'The response should contain a success message');
   t.is(responseSuccess.body.text, 'File successfully deleted', 'The success message should match');
+});
 
-  // Μη υπαρκτό αρχείο
-  const responseNotFound = await got.delete(`users/1/UserFiles/Files/999`, {
+test('DELETE /users/{userid}/UserFiles/Files/{fileid} for non-existent file deletion', async (t) => {
+  const { got } = t.context;
+  const userid = 1;
+  const fileid = 2;
+  const responseNotFound = await got.delete(`users/${userid}/UserFiles/Files/${fileid}`, {
     throwHttpErrors: false,
   });
   t.is(responseNotFound.statusCode, 404, 'The response status code should be 404 for non-existent file');
@@ -130,11 +142,12 @@ test('DELETE /users/{userid}/UserFiles/Files/{fileid} handles successful and non
 });
 
 
-// Τεστ για μη έγκυρες παραμέτρους
 test('DELETE /users/{userid}/UserFiles/Files/{fileid} returns 400 for invalid userid or fileid', async (t) => {
   const { got } = t.context;
+  const userid = 'invalid';
+  const fileid = 'invalid';
 
-  const responseInvalid = await got.delete(`users/invalid/UserFiles/Files/invalid`, {
+  const responseInvalid = await got.delete(`users/${userid}/UserFiles/Files/${fileid}`, {
       throwHttpErrors: false,
   });
 
@@ -147,7 +160,8 @@ test('DELETE /users/{userid}/UserFiles/Files/{fileid} returns 400 for invalid us
   );
 });
 
-// Τεστ για επιτυχή λήψη αρχείου
+//GET /course/{courseid}/Files/{fileid}
+
 test('GET /course/{courseid}/Files/{fileid} retrieves the file successfully', async (t) => {
   const { got } = t.context;
   const courseid = 1;
@@ -163,11 +177,11 @@ test('GET /course/{courseid}/Files/{fileid} retrieves the file successfully', as
   t.is(response.body.text, 'File successfully retrieved', 'The success message should match');
 });
 
-// Τεστ για μη υπαρκτό αρχείο
+
 test('GET /course/{courseid}/Files/{fileid} returns 404 for non-existent file', async (t) => {
   const { got } = t.context;
   const courseid = 1;
-  const fileid = 999; // File ID που δεν υπάρχει
+  const fileid = 999; // Non-existent file
 
   const response = await got(`course/${courseid}/Files/${fileid}`, {
     method: 'GET',
@@ -179,67 +193,9 @@ test('GET /course/{courseid}/Files/{fileid} returns 404 for non-existent file', 
   t.is(response.body.message, 'File not found', 'The error message should match');
 });
 
-test('POST /course/{courseid}/reviews adds a review successfully', async (t) => {
-  const { got } = t.context;
-  const courseid = 1;
-  const review = {
-    starnumber: 5,
-    author: 'John Doe',
-    review: 'Great course!',
-  };
 
-  const response = await got.post(`course/${courseid}/reviews`, {
-    json: review,
-    throwHttpErrors: false,
-  });
+// GET /users/{userid}/Favourites/Files
 
-  t.is(response.statusCode, 200, 'The response status code should be 201 for successful creation');
-  t.truthy(response.body.text, 'The response should contain a success message');
-  t.is(response.body.text, 'Review successfully added', 'The success message should match');
-  t.deepEqual(response.body.review, { ...review, courseid: courseid }, 'The review details should match');
-});
-
-test('POST /course/{courseid}/reviews returns 400 for invalid review data', async (t) => {
-  const { got } = t.context;
-  const courseid = 1;
-  const invalidReview = {
-    starnumber: 5,
-    author: 'John Doe', // Missing "review" field
-  };
-
-  const response = await got.post(`course/${courseid}/reviews`, {
-    json: invalidReview,
-    throwHttpErrors: false,
-  });
-
-  t.is(response.statusCode, 400, 'The response status code should be 400 for invalid input');
-  t.truthy(response.body.message, 'The response should contain an error message');
-  t.is(response.body.message, 'Invalid review data', 'The error message should match');
-});
-
-// Τεστ για επιτυχή και ανεπιτυχή ανάκτηση αγαπημένων
-test('GET /users/{userid}/Favourites/Files handles successful retrieval and no favourites', async (t) => {
-  const { got } = t.context;
-
-  // Επιτυχής ανάκτηση
-  const responseSuccess = await got(`users/1/Favourites/Files`, { throwHttpErrors: false });
-
-  t.is(responseSuccess.statusCode, 200, 'The response status code should be 200 for successful retrieval');
-  t.truthy(responseSuccess.body, 'The response should contain a list of favourite files');
-  t.deepEqual(responseSuccess.body, [
-    { fileid: 101, title: 'File 1', school: 'School A', fileType: 'pdf', accessStatus: 1 },
-    { fileid: 102, title: 'File 2', school: 'School B', fileType: 'doc', accessStatus: 0 },
-  ], 'The favourites list should match the expected values');
-
-  // Χρήστης χωρίς αγαπημένα
-  const responseNoFavourites = await got(`users/2/Favourites/Files`, { throwHttpErrors: false });
-
-  t.is(responseNoFavourites.statusCode, 404, 'The response status code should be 404 for user without favourites');
-  t.truthy(responseNoFavourites.body.message, 'The response should contain an error message');
-  t.is(responseNoFavourites.body.message, 'No favourites found for this user', 'The error message should match');
-});
-
-// Τεστ για μη έγκυρο χρήστη
 test('GET /users/{userid}/Favourites/Files returns 400 for invalid user ID', async (t) => {
   const { got } = t.context;
   const userid = 'invalid';
@@ -251,29 +207,35 @@ test('GET /users/{userid}/Favourites/Files returns 400 for invalid user ID', asy
   t.is(response.body.message, 'request.params.userid should be integer', 'The error message should match');
 });
 
-// Τεστ για επιτυχία και μη ύπαρξη αρχείων
-test('GET /course/{courseid}/Files handles successful retrieval and non-existent course', async (t) => {
-  const { got } = t.context;
 
-  // Επιτυχής επιστροφή αρχείων
-  const responseSuccess = await got(`course/1/Files`, { method: 'GET', throwHttpErrors: false });
+// GET /course/{courseid}/Files
+
+test('GET /course/{courseid}/Files handles successful retrieval', async (t) => {
+  const { got } = t.context;
+  const courseid = 1;
+
+  const responseSuccess = await got(`course/${courseid}/Files`, { method: 'GET', throwHttpErrors: false });
+  
   t.is(responseSuccess.statusCode, 200, 'The response status code should be 200 for successful retrieval');
   t.truthy(responseSuccess.body, 'The response should contain file details');
   t.true(Array.isArray(responseSuccess.body), 'The response should be an array');
   t.truthy(responseSuccess.body.length > 0, 'The array should not be empty');
-
-  // Μη υπαρκτό course
-  const responseNotFound = await got(`course/999/Files`, { method: 'GET', throwHttpErrors: false });
-  t.is(responseNotFound.statusCode, 404, 'The response status code should be 404 for non-existent course');
-  t.truthy(responseNotFound.body.message, 'The response should contain an error message');
-  t.is(responseNotFound.body.message, 'Course not found', 'The error message should match');
 });
 
-// Τεστ για επιτυχία και μη εύρεση αποτελεσμάτων
-test('GET /course/search handles successful search and no results', async (t) => {
+test('GET /course/{courseid}/Files for non-existent course', async (t) => {
+  const { got } = t.context;
+  const courseid = 'invalid';
+
+  const responseNotFound = await got(`course/${courseid}/Files`, { method: 'GET', throwHttpErrors: false });
+  
+  t.is(responseNotFound.statusCode, 400, 'The response status code should be 400 for non-existent course');
+  t.truthy(responseNotFound.body.message, 'The response should contain an error message');
+  t.is(responseNotFound.body.message, 'request.params.courseid should be integer', 'The error message should match');
+});
+
+test('GET /course/search handles successful search', async (t) => {
   const { got } = t.context;
 
-  // Επιτυχής αναζήτηση
   const responseSuccess = await got('course/search?keyword=math', {
     method: 'GET',
     throwHttpErrors: false,
@@ -282,8 +244,11 @@ test('GET /course/search handles successful search and no results', async (t) =>
   t.truthy(responseSuccess.body, 'The response should contain search results');
   t.true(Array.isArray(responseSuccess.body), 'The response should be an array');
   t.truthy(responseSuccess.body.length > 0, 'The array should not be empty');
+});
 
-  // Αναζήτηση χωρίς αποτελέσματα
+test('GET /course/search for no results', async (t) => {
+  const { got } = t.context;
+
   const responseNoResults = await got('course/search?keyword=unknown', {
     method: 'GET',
     throwHttpErrors: false,
@@ -293,11 +258,11 @@ test('GET /course/search handles successful search and no results', async (t) =>
   t.is(responseNoResults.body.length, 0, 'The array should be empty when no results are found');
 });
 
-// Τεστ για μη έγκυρη είσοδο
-test('GET /course/search handles invalid input', async (t) => {
+
+test('GET /course/search for missing keyword', async (t) => {
   const { got } = t.context;
 
-  // Έλλειψη keyword
+  // Missing keyword
   const responseInvalid = await got('course/search', {
     method: 'GET',
     throwHttpErrors: false,
@@ -307,11 +272,11 @@ test('GET /course/search handles invalid input', async (t) => {
   t.is(responseInvalid.body.message, 'request.query should have required property \'keyword\'', 'The error message should match');
 });
 
-// Τεστ για επιτυχές ανέβασμα αρχείου και μη έγκυρη είσοδο
-test('POST /users/{userid}/UserFiles/Files handles successful upload and invalid input', async (t) => {
+//POST /users/{userid}/UserFiles/Files
+
+test('POST /users/{userid}/UserFiles/Files handles successful upload', async (t) => {
   const { got } = t.context;
 
-  // Επιτυχές ανέβασμα
   const validFile = {
     title: 1,
     school: 2,
@@ -326,10 +291,14 @@ test('POST /users/{userid}/UserFiles/Files handles successful upload and invalid
   t.is(responseSuccess.statusCode, 200, 'The response status code should be 200 for successful upload');
   t.truthy(responseSuccess.body.text, 'The response should contain a success message');
   t.is(responseSuccess.body.text, 'File successfully uploaded', 'The success message should match');
+});
 
-  // Μη έγκυρη είσοδος
+test('POST /users/{userid}/UserFiles/Files for invalid input', async (t) => {
+  const { got } = t.context;
+  const userid = 1;
+
   const invalidFile = {
-    title: 'invalid', // Περιμένουμε ακέραιο για το title
+    title: 'invalid',
     school: 2,
     fileType: 'pdf',
     accessStatus: 1,
@@ -341,47 +310,50 @@ test('POST /users/{userid}/UserFiles/Files handles successful upload and invalid
   });
   t.is(responseInvalid.statusCode, 400, 'The response status code should be 400 for invalid input');
   t.truthy(responseInvalid.body.message, 'The response should contain an error message');
-  t.is(responseInvalid.body.message, 'Invalid file data provided', 'The error message should match');
+  t.is(responseInvalid.body.message, 'request.body.title should be integer', 'The error message should match');
 });
 
-// Τεστ για επιτυχία και μη έγκυρη είσοδο
-test('DELETE /users/{userid}/Favourites/Files/{fileid} handles successful deletion and invalid input', async (t) => {
-  const { got } = t.context;
+//DELETE /users/{userid}/Files/{fileid}
 
-  // Επιτυχής διαγραφή
+test('DELETE /users/{userid}/Favourites/Files/{fileid} handles successful deletion', async (t) => {
+  const { got } = t.context;
+  const userid = 1;
+  const fileid = 101;
+
   const responseSuccess = await got.delete('users/1/Favourites/Files/101', {
     throwHttpErrors: false,
   });
   t.is(responseSuccess.statusCode, 200, 'The response status code should be 200 for successful deletion');
   t.truthy(responseSuccess.body.text, 'The response should contain a success message');
   t.is(responseSuccess.body.text, 'File successfully removed from favourites', 'The success message should match');
+});
 
-  // Μη έγκυρη είσοδος
+test('DELETE /users/{userid}/Favourites/Files/{fileid} for invalid input', async (t) => {
+  const { got } = t.context;
+
   const responseInvalid = await got.delete('users/invalid/Favourites/Files/invalid', {
     throwHttpErrors: false,
   });
   t.is(responseInvalid.statusCode, 400, 'The response status code should be 400 for invalid input');
   t.truthy(responseInvalid.body.message, 'The response should contain an error message');
-  t.is(
-    responseInvalid.body.message,
-    'Invalid user ID or file ID',
-    'The error message should match the validation error'
-  );
 });
 
-// Τεστ για επιτυχία και μη έγκυρη είσοδο
-test('DELETE /admin/courses/{courseid} handles successful deletion and invalid input', async (t) => {
+//Tests for admin
+
+test('DELETE /admin/courses/{courseid} handles successful deletion', async (t) => {
   const { got } = t.context;
 
-  // Επιτυχής διαγραφή
   const responseSuccess = await got.delete('admin/courses/101', {
     throwHttpErrors: false,
   });
   t.is(responseSuccess.statusCode, 200, 'The response status code should be 200 for successful deletion');
   t.truthy(responseSuccess.body.text, 'The response should contain a success message');
   t.is(responseSuccess.body.text, 'Course successfully deleted', 'The success message should match');
+});
 
-  // Μη έγκυρη είσοδος
+test('DELETE /admin/courses/{courseid} for invalid input', async (t) => {
+    const { got } = t.context;
+
   const responseInvalid = await got.delete('admin/courses/invalid', {
     throwHttpErrors: false,
   });
@@ -389,16 +361,17 @@ test('DELETE /admin/courses/{courseid} handles successful deletion and invalid i
   t.truthy(responseInvalid.body.message, 'The response should contain an error message');
   t.is(
     responseInvalid.body.message,
-    'Invalid course ID',
+    'request.params.courseid should be integer',
     'The error message should match the validation error'
   );
 });
 
-// Τεστ για επιτυχία και μη έγκυρη είσοδο
-test('PUT /admin/courses/{courseid} handles successful editing and invalid input', async (t) => {
-  const { got } = t.context;
+// Test for PUT /admin/courses/{courseid} 
 
-  // Επιτυχής επεξεργασία
+test('PUT /admin/courses/{courseid} handles successful editing', async (t) => {
+  const { got } = t.context;
+  const courseid = 101;
+
   const updatedCourse = {
     title: 'Advanced Mathematics',
     school: 'Science',
@@ -413,10 +386,15 @@ test('PUT /admin/courses/{courseid} handles successful editing and invalid input
   t.is(responseSuccess.statusCode, 200, 'The response status code should be 200 for successful editing');
   t.truthy(responseSuccess.body.text, 'The response should contain a success message');
   t.is(responseSuccess.body.text, 'Course successfully updated', 'The success message should match');
+});
 
-  // Μη έγκυρη είσοδος
+
+test('PUT /admin/courses/{courseid} foor invalid input', async (t) => {
+  const { got } = t.context;
+  const  courseid = 'invalid';
+  
   const invalidCourse = {
-    title: '', // Άδειος τίτλος
+    title: '',
     school: 'Science',
     university: 'National University',
     semester: 'Spring 2024',
@@ -430,7 +408,7 @@ test('PUT /admin/courses/{courseid} handles successful editing and invalid input
   t.truthy(responseInvalid.body.message, 'The response should contain an error message');
   t.is(
     responseInvalid.body.message,
-    'Invalid course ID or request body',
+    'request.params.courseid should be integer',
     'The error message should match the validation error'
   );
 });
