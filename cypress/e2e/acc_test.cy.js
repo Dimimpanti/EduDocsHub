@@ -15,8 +15,11 @@ describe("EduDocsHub Home page", () => {
         //Tests for PUT /admin/courses/{courseid}
         cy.get('#operations-admin-adminCourseEditing').should('exist').click();
         cy.get('.try-out__btn').should('exist').click();
+        cy.get('input[placeholder^="courseid - The ID of the course that the admin is going to edit.').should('exist').type("101");
         cy.get('.btn.execute').should('exist').click();
         cy.contains('Responses').should('exist');
+        cy.contains('Response body').should('exist');
+        cy.contains('200').should('be.visible');
         cy.get('.try-out__btn.cancel').should('exist').click();
 
     })
@@ -37,8 +40,11 @@ describe("EduDocsHub Home page", () => {
         //Tests for GET/courses/search
         cy.get('#operations-user-searchCourseDB').should('exist').click();
         cy.get('.try-out__btn').should('exist').click();
+        cy.get('input[placeholder^="keyword - Keyword to search for in courseDB.').should('exist').type("1");
         cy.get('.btn.execute').should('exist').click();
         cy.contains('Responses').should('exist');
+        cy.contains('Response body').should('exist');
+        cy.contains('200').should('be.visible');
         cy.get('.try-out__btn.cancel').should('exist').click();
     })
     
@@ -51,4 +57,29 @@ describe("EduDocsHub Home page", () => {
         cy.get('.try-out__btn.cancel').should('exist').click();
     })
 
+
+    it("Swagger UI and GET/course/{courseid}/reviews enpoint testing for User", () => {
+       
+        cy.get('#operations-user-viewReview').should('exist').click();
+        cy.get('.try-out__btn').should('exist').click();
+        cy.get('input[placeholder^="courseid - The courseid.').should('exist').type("1");
+        cy.get('.btn.execute').should('exist').click();
+        cy.contains('Responses').should('exist');
+        cy.contains('Response body').should('exist');
+        cy.contains('200').should('be.visible');
+        cy.get('.try-out__btn.cancel').should('exist').click();
+    })
+
+    it("Swagger UI and  POST/users{userid}/Favourites/Files/{fileid} enpoint testing for User", () => {
+        
+        cy.get('#operations-user-addFavouriteFile').should('exist').click();
+        cy.get('.try-out__btn').should('exist').click();
+        cy.get('input[placeholder^="userid - The user ID for whom to add file to the favourites folder').should('exist').type("1");
+        cy.get('input[placeholder^="fileid - The file ID to perform the post oparation.').should('exist').type("101")
+        cy.get('.btn.execute').should('exist').click();
+        cy.contains('Responses').should('exist');
+        cy.contains('Response body').should('exist');
+        cy.contains('200').should('be.visible');
+        cy.get('.try-out__btn.cancel').should('exist').click();
+    })
 });
