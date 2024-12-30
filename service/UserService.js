@@ -24,15 +24,6 @@ exports.addFavouriteFile = function(userid,fileid) {
   });
 }
 
-
-/**
- * download file
- * User download a file
- *
- * courseid Integer The courseid in order to get the course object.
- * fileid Integer The fileid of the file
- * returns Message
- **/
 /**
  * download file
  * User downloads a file
@@ -187,12 +178,6 @@ exports.removeFavouriteFile = function (userid, fileid) {
   });
 };
 
-
-
-
-
-
-
 /**
  * searches Courses DB
  * Returns arrays of Course objects
@@ -297,9 +282,6 @@ exports.userFavouritesFiles = function(userid) {
   });
 };
 
-
-
-
 /**
  * user file editing
  * we send the new charachteristics of the file and we get a comfirmation message as a response
@@ -324,9 +306,6 @@ exports.userFileEditing = function(body, userid, fileid) {
     });
   });
 };
-
-
-
 
 /**
  * view Review
@@ -367,19 +346,6 @@ exports.viewReview = function(courseid) {
     }
   });
 };
-
-
-
-
-/**
- * write review
- * We send the fileid of a file and we get a file object as a response
- *
- * body Rating  (optional)
- * courseid Integer The courseid.
- * returns Message
- **/
-
 
 /**
  * write review
