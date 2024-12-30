@@ -9,20 +9,30 @@
  * fileid Integer The file ID to perform the post oparation. 
  * returns Message
  **/
-exports.addFavouriteFile = function(userid,fileid) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-      "text": "File added to favourites"
-    };
-    
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
+exports.addFavouriteFile = function (userid, fileid) {
+  return new Promise((resolve, reject) => {
+    if (isNaN(userid) || isNaN(fileid)) {
+      reject({
+        code: 400,
+        message: 'Invalid user ID or file ID',
+      });
+      return;
+    }
+    const success = true; // Replace with actual logic
+
+    if (success) {
+      resolve({
+        code: 200,
+        text: 'File added to favourites',
+      });
     } else {
-      resolve();
+      reject({
+        code: 500,
+        message: 'Failed to add file to favourites',
+      });
     }
   });
-}
+};
 
 /**
  * download file
