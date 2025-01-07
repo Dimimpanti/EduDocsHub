@@ -13,7 +13,7 @@ var User = require('../service/UserService');
  * userid Integer The user ID for whom to add file to the favourites folder 
  * fileid Integer The file ID to perform the post oparation. 
  **/
-module.exports.addFavouriteFile = function addFavouriteFile (req, res, _, userid, fileid) {
+module.exports.addFavouriteFile = function addFavouriteFile (_, res, __, userid, fileid) {
   User.addFavouriteFile(userid, fileid)
     .then(function (response) {
       utils.writeJson(res, response);
@@ -31,7 +31,7 @@ module.exports.addFavouriteFile = function addFavouriteFile (req, res, _, userid
  * fileid Integer The fileid of the file
  * returns Message
  **/
-module.exports.downloadFile = function downloadFile(req, res, _, courseid, fileid) {
+module.exports.downloadFile = function downloadFile(_, res, __, courseid, fileid) {
   User.downloadFile(courseid, fileid)
     .then(function (response) {
       utils.writeJson(res, { text: response.text }, response.code);
@@ -53,7 +53,7 @@ module.exports.downloadFile = function downloadFile(req, res, _, courseid, filei
  *
  * courseid Integer The courseid in order to get the course object.
  **/
-module.exports.getFiles = function getFiles(req, res, _, courseid) {
+module.exports.getFiles = function getFiles(_, res, __, courseid) {
   User.getFiles(courseid)
     .then(function (response) {
       utils.writeJson(res, response, 200);
@@ -76,7 +76,7 @@ module.exports.getFiles = function getFiles(req, res, _, courseid) {
  * userid Integer The user ID for whom to laod the favourites files. 
  * fileid Integer The file ID to perform the delete oparation. 
  **/
-module.exports.removeFavouriteFile = function removeFavouriteFile(req, res, _, userid, fileid) {
+module.exports.removeFavouriteFile = function removeFavouriteFile(_, res, __, userid, fileid) {
   User.removeFavouriteFile(userid, fileid)
     .then(function (response) {
       utils.writeJson(res, response, 200);
@@ -101,7 +101,7 @@ module.exports.removeFavouriteFile = function removeFavouriteFile(req, res, _, u
  * userid Integer The user ID
  * fileid Integer The File ID
  **/
-module.exports.removeUserFile = function removeUserFile(req, res, _, userid, fileid) {
+module.exports.removeUserFile = function removeUserFile(_, res, __, userid, fileid) {
   User.removeUserFile(userid, fileid)
     .then(function (response) {
       utils.writeJson(res, { text: response.text }, response.code);
@@ -125,7 +125,7 @@ module.exports.removeUserFile = function removeUserFile(req, res, _, userid, fil
  * keyword String Keyword to search for in courseDB.
  * returns CourseArray
  **/
-module.exports.searchCourseDB = function searchCourseDB (req, res, _, keyword) {
+module.exports.searchCourseDB = function searchCourseDB (_, res, __, keyword) {
   User.searchCourseDB(keyword)
     .then(function (response) {
       utils.writeJson(res, response);
@@ -141,7 +141,7 @@ module.exports.searchCourseDB = function searchCourseDB (req, res, _, keyword) {
  * body File  (optional)
  * userid Integer The user ID in order to perform the course search.
  **/
-module.exports.uploadNewFile = function uploadNewFile (req, res, _, body, userid) {
+module.exports.uploadNewFile = function uploadNewFile (_, res, __, body, userid) {
   User.uploadNewFile(body, userid)
     .then(function (response) {
       utils.writeJson(res, response);
@@ -157,7 +157,7 @@ module.exports.uploadNewFile = function uploadNewFile (req, res, _, body, userid
  *
  * userid Integer The user ID 
  **/
-module.exports.userFavouritesFiles = function userFavouritesFiles (req, res, _, userid) {
+module.exports.userFavouritesFiles = function userFavouritesFiles (_, res, __, userid) {
   User.userFavouritesFiles(userid)
     .then(function (response) {
       utils.writeJson(res, response);
@@ -174,7 +174,7 @@ module.exports.userFavouritesFiles = function userFavouritesFiles (req, res, _, 
  * userid Integer The user ID for whom to perform the course search.
  * fileid Integer The file ID for the file will perform the update
  **/
-module.exports.userFileEditing = function userFileEditing (req, res, _, body, userid, fileid) {
+module.exports.userFileEditing = function userFileEditing (_, res, __, body, userid, fileid) {
   User.userFileEditing(body, userid, fileid)
     .then(function (response) {
       utils.writeJson(res, response);
@@ -191,7 +191,7 @@ module.exports.userFileEditing = function userFileEditing (req, res, _, body, us
  * courseid Integer The courseid.
  * returns RatingArray
  **/
-module.exports.viewReview = function viewReview (req, res, _, courseid) {
+module.exports.viewReview = function viewReview (_, res, __, courseid) {
   User.viewReview(courseid)
     .then(function (response) {
       utils.writeJson(res, response);
@@ -209,7 +209,7 @@ module.exports.viewReview = function viewReview (req, res, _, courseid) {
  * body Object The review details
  * returns Message
  **/
-module.exports.writeReview = function writeReview (req, res, _, body, courseid) {
+module.exports.writeReview = function writeReview (_, res, __, body, courseid) {
   User.writeReview(body, courseid)
     .then(function (response) {
       utils.writeJson(res, response);
