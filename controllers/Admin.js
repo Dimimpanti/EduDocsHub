@@ -11,7 +11,7 @@ var Admin = require('../service/AdminService');
  * courseid Integer The ID of the course that the admin is going to edit. 
  * returns Message
  **/
-module.exports.adminCourseEditing = function adminCourseEditing(req, res, _, body, courseid) {
+module.exports.adminCourseEditing = function adminCourseEditing(_, res, __, body, courseid) {
   Admin.adminCourseEditing(body, courseid)
     .then(function (response) {
       utils.writeJson(res, response, 200);
@@ -35,7 +35,7 @@ module.exports.adminCourseEditing = function adminCourseEditing(req, res, _, bod
  * courseid Integer The courseid in order to get the course object.
  * returns Message
  **/
-module.exports.adminRemoveCourse = function adminRemoveCourse(req, res, _, courseid) {
+module.exports.adminRemoveCourse = function adminRemoveCourse(_, res, __, courseid) {
   Admin.adminRemoveCourse(courseid)
     .then(function (response) {
       utils.writeJson(res, response, 200);
