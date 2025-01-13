@@ -39,13 +39,6 @@ exports.addFavouriteFile = function (userid, fileid) {
  **/
 exports.downloadFile = function (courseid, fileid) {
   return new Promise(function (resolve, reject) {
-    if (isNaN(courseid) || isNaN(fileid)) {
-      reject({
-        code: 400,
-        message: 'Invalid course ID or file ID',
-      });
-      return;
-    }
 
     const existingFiles = [
       { courseid: 1, fileid: 101, text: 'File successfully retrieved' },
@@ -120,13 +113,6 @@ exports.getFiles = function (courseid) {
  **/
 exports.removeFavouriteFile = function (userid, fileid) {
   return new Promise(function (resolve, reject) {
-    if (isNaN(userid) || isNaN(fileid)) {
-      reject({
-        code: 400,
-        message: 'Invalid user ID or file ID',
-      });
-      return;
-    }
 
     const existingFiles = [101, 102, 103]; // Παράδειγμα υπαρχόντων αρχείων
     if (!existingFiles.includes(fileid)) {
@@ -155,14 +141,6 @@ exports.removeFavouriteFile = function (userid, fileid) {
  **/
  exports.removeUserFile = function (userid, fileid) {
   return new Promise(function (resolve, reject) {
-    if (isNaN(userid) || isNaN(fileid)) {
-      reject({
-        code: 400,
-        message: 'request.params.userid should be integer, request.params.fileid should be integer',
-      });
-      return;
-    }
-
     const existingFiles = [201, 202, 203]; // Παράδειγμα υπαρχόντων αρχείων
     
     if (!existingFiles.includes(fileid)) {
