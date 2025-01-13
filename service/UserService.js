@@ -25,11 +25,6 @@ exports.addFavouriteFile = function (userid, fileid) {
         code: 200,
         text: 'File added to favourites',
       });
-    } else {
-      reject({
-        code: 500,
-        message: 'Failed to add file to favourites',
-      });
     }
   });
 };
@@ -263,13 +258,6 @@ exports.uploadNewFile = function (body, userid) {
  **/
 exports.userFavouritesFiles = function(userid) {
   return new Promise(function(resolve, reject) {
-    if (isNaN(userid)) {
-      reject({
-        code: 400,
-        message: 'request.params.userid should be integer',
-      });
-      return;
-    }
 
     // Παράδειγμα δεδομένων
     const favourites = {
@@ -283,11 +271,6 @@ exports.userFavouritesFiles = function(userid) {
     const userFavourites = favourites[userid];
     if (userFavourites && userFavourites.length > 0) {
       resolve(userFavourites);
-    } else {
-      reject({
-        code: 404,
-        message: 'No favourites found for this user',
-      });
     }
   });
 };
@@ -326,14 +309,6 @@ exports.userFileEditing = function(body, userid, fileid) {
  **/
 exports.viewReview = function(courseid) {
   return new Promise(function(resolve, reject) {
-    if (courseid === 'error') {
-      reject({
-        code: 500,
-        message: 'Simulated unexpected error',
-      });
-      return;
-    }
-
     const examples = {
       1: [
         {
@@ -374,15 +349,6 @@ exports.writeReview = function (courseid, body) {
       });
       return;
     }
-
-    if (!body || !body.starnumber || !body.author || !body.review) {
-      reject({
-        code: 400,
-        message: 'Invalid review data',
-      });
-      return;
-    }
-
     // Προσθήκη κριτικής (απλή προσομοίωση)
     const newReview = {
       courseid: courseid,
@@ -436,23 +402,8 @@ exports.getCourseFile = function (courseid, fileid) {
     };
 
     const files = existingFiles[courseid];
-    if (!files) {
-      reject({
-        code: 404,
-        message: 'Course not found',
-      });
-      return;
-    }
 
     const file = files.find((f) => f.fileid === fileid);
-    if (!file) {
-      reject({
-        code: 404,
-        message: 'File not found',
-      });
-      return;
-    }
-
     // Επιτυχής ανάκτηση αρχείου
     resolve({
       code: 200,

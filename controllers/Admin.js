@@ -11,21 +11,16 @@ var Admin = require('../service/AdminService');
  * courseid Integer The ID of the course that the admin is going to edit. 
  * returns Message
  **/
-module.exports.adminCourseEditing = function adminCourseEditing(_, res, __, body, courseid) {
+module.exports.adminCourseEditing = function adminCourseEditing(_, res, next, body, courseid) {
   Admin.adminCourseEditing(body, courseid)
     .then(function (response) {
-      utils.writeJson(res, response, 200);
+      utils.writeJson(res, response);
     })
-    .catch(function (error) {
-      if (error.code === 400) {
-        utils.writeJson(res, { message: error.message }, 400);
-      } else if (error.code === 404) {
-        utils.writeJson(res, { message: error.message }, 404);
-      } else {
-        console.error('Unexpected error:', error);
-        utils.writeJson(res, { message: 'Unexpected error occurred' }, 500);
-      }
+    .catch(function (response) {
+      utils.writeJson(res, response);
     });
+    
+  next();
 };
 
 /**
@@ -35,19 +30,14 @@ module.exports.adminCourseEditing = function adminCourseEditing(_, res, __, body
  * courseid Integer The courseid in order to get the course object.
  * returns Message
  **/
-module.exports.adminRemoveCourse = function adminRemoveCourse(_, res, __, courseid) {
+module.exports.adminRemoveCourse = function adminRemoveCourse(_, res, next, courseid) {
   Admin.adminRemoveCourse(courseid)
     .then(function (response) {
-      utils.writeJson(res, response, 200);
+      utils.writeJson(res, response);
     })
-    .catch(function (error) {
-      if (error.code === 400) {
-        utils.writeJson(res, { message: error.message }, 400);
-      } else if (error.code === 404) {
-        utils.writeJson(res, { message: error.message }, 404);
-      } else {
-        console.error('Unexpected error:', error);
-        utils.writeJson(res, { message: 'Unexpected error occurred' }, 500);
-      }
+    .catch(function (response) {
+      utils.writeJson(res, response);
     });
+
+  next();
 };

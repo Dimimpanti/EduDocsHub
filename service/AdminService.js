@@ -20,14 +20,6 @@ exports.adminCourseEditing = function (body, courseid) {
     }
 
     const existingCourses = [101, 102, 103]; // Παράδειγμα υπαρχόντων μαθημάτων
-    if (!existingCourses.includes(courseid)) {
-      reject({
-        code: 404,
-        message: 'Course not found',
-      });
-      return;
-    }
-
     // Επιτυχής επεξεργασία
     resolve({
       text: 'Course successfully updated',
@@ -55,14 +47,6 @@ exports.adminRemoveCourse = function (courseid) {
     }
 
     const existingCourses = [101, 102, 103]; // Παράδειγμα υπαρχόντων μαθημάτων
-    if (!existingCourses.includes(courseid)) {
-      reject({
-        code: 404,
-        message: 'Course not found',
-      });
-      return;
-    }
-
     // Επιτυχής διαγραφή
     resolve({
       text: 'Course successfully deleted',
